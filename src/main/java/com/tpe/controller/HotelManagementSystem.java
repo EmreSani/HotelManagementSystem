@@ -1,6 +1,8 @@
 package com.tpe.controller;
 
 import com.tpe.config.HibernateUtils;
+import com.tpe.repository.HotelRepository;
+import com.tpe.service.HotelService;
 
 import java.util.Scanner;
 
@@ -9,6 +11,10 @@ public class HotelManagementSystem {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void displayHotelManagementSystemMenu() {
+
+        HotelRepository hotelRepository = new HotelRepository();
+        HotelService hotelService = new HotelService(hotelRepository);
+
         boolean exit = false;
 
         while (!exit) {
@@ -25,16 +31,16 @@ public class HotelManagementSystem {
 
             switch (choice) {
                 case 1:
-displayHotelOperationsMenu();
+                    displayHotelOperationsMenu(hotelService);
                     break;
                 case 2:
-displayRoomOperationsMenu();
+                    displayRoomOperationsMenu();
                     break;
                 case 3:
-displayGuestOperationsMenu();
+                    displayGuestOperationsMenu();
                     break;
                 case 4:
-displayReservationOperationsMenu();
+                    displayReservationOperationsMenu();
                     break;
                 case 0:
                     exit = true;
@@ -52,7 +58,7 @@ displayReservationOperationsMenu();
     }
 
     //hotel operations
-    private static void displayHotelOperationsMenu() {
+    private static void displayHotelOperationsMenu(HotelService hotelService) {
 
         System.out.println("Hotel Operation Menu");
 
@@ -72,16 +78,20 @@ displayReservationOperationsMenu();
 
             switch (choice) {
                 case 1:
-
+                    hotelService.saveHotel();
                     break;
                 case 2:
+                    System.out.println("Enter hotel ID : ");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
 
+                    hotelService.findHotelById(id);
                     break;
                 case 3:
 
                     break;
                 case 4:
-
+                    hotelService.getAllHotels();
                     break;
                 case 5:
 
