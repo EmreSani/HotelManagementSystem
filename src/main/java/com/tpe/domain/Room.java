@@ -1,9 +1,6 @@
 package com.tpe.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +18,8 @@ public class Room {
     private Integer capacity;
 
     //todo: many to one
+    @ManyToOne
+    @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 
     //todo: one to many
