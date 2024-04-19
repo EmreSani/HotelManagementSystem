@@ -5,22 +5,37 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Table(name = "t_guest")
 public class Guest {
 
-    @Id
+    //todo : auto generated
+    @Id//pk
     private Long id;
 
     @Column(nullable = false)
     private String name;
-
-    //todo: createDate reservations
     private LocalDateTime createDate;
-    private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "guest",orphanRemoval = true)//tablo ile ilişkiyi kurar:gerek yok
+    private List<Reservation> reservations=new ArrayList<>();
+
+//    private String street;
+//    private String city;
+//    private String country;
+//    private int zipcode;
 
     @Embedded
     private Address address;
+
+    @PrePersist
+    public void prePersist(){
+        this.createDate=LocalDateTime.now();
+    }
+
+    //getter-setter
+
 
     public Long getId() {
         return id;
@@ -42,9 +57,9 @@ public class Guest {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
+//    public void setCreateDate(LocalDateTime createDate) {
+//        this.createDate = createDate;
+//    }
 
     public List<Reservation> getReservations() {
         return reservations;

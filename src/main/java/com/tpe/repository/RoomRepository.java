@@ -10,8 +10,10 @@ import java.util.List;
 
 public class RoomRepository {
 
+    //ÖDEV: save, findById, findAll
     private Session session;
 
+    //4-c
     public void save(Room room) {
 
         try {
@@ -27,6 +29,7 @@ public class RoomRepository {
         }
     }
 
+    //5-c
 
     public Room findById(Long roomId) {
         try {
@@ -41,7 +44,7 @@ public class RoomRepository {
         return null;
     }
 
-
+   //6-c
     public List<Room> findAll() {
         try {
             session = HibernateUtils.getSessionFactory().openSession();

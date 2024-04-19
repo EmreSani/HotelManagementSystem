@@ -5,29 +5,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table( name = "t_hotel")
+@Table(name = "t_hotel")
 public class Hotel {
 
-    @Id //primary key
+    @Id//primary key
     private Long id;
 
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String location;
 
-    @OneToMany(mappedBy = "hotel")
-    private List<Room> rooms = new ArrayList<>();
+    //orphanRemoval
+    //A otelinin odaları: 11,12,13
+    //A otelinin oda listesinden 11 i çıkarırsam:room tabledan 11 i siler
+
+    //cascade:
+    //A otelinin odaları: 11,12,13
+    //A otelinin oda listesinden 11 i çıkarırsam:room tableda 11 hala var
+
+
+    @OneToMany(mappedBy = "hotel",cascade = CascadeType.REMOVE)//hotel ile room arasında ilişki kurulmasını sağlar: ilişki tablosu ekler
+    private List<Room> rooms=new ArrayList<>();
 
     //hibernate data çekerken(fetch) default constructorı kullanır.
     public Hotel() {
     }
+
+    //param const
 
     public Hotel(Long id, String name, String location) {
         this.id = id;
         this.name = name;
         this.location = location;
     }
+
+
+    //getter-setter
+
 
     public Long getId() {
         return id;
