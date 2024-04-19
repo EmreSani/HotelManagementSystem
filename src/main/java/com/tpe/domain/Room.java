@@ -9,7 +9,7 @@ import java.util.List;
 public class Room {
 
     @Id
-    private Long id;
+    private Long id;//PK
 
     @Column(nullable = false)
     private String number;
@@ -17,23 +17,27 @@ public class Room {
     @Column(nullable = false)
     private Integer capacity;
 
-    //todo: many to one
-    @ManyToOne
-    @JoinColumn(name = "hotel_id", nullable = false)
+    //todo:  many-to-one
+    @ManyToOne//room ile hotel arasında ilişki kurulmasını sağlar:room tablosuna FK(hotel_id) ekler
+    @JoinColumn(name = "hotel_id",nullable = false)//opsiyonel
     private Hotel hotel;
 
-    //todo: one to many
-    private List<Reservation> reservations = new ArrayList<>();
+    //todo: one-to-many
+    //n02: comment
+    @OneToMany(mappedBy = "room",orphanRemoval = true)
+    private List<Reservation> reservations=new ArrayList<>();
 
     public Room() {
     }
 
-    public Room(Hotel hotel, Integer capacity, String number, Long id) {
-        this.hotel = hotel;
-        this.capacity = capacity;
-        this.number = number;
+    public Room(Long id, String number, Integer capacity, Hotel hotel) {
         this.id = id;
+        this.number = number;
+        this.capacity = capacity;
+        this.hotel = hotel;
     }
+
+    //getter-setter
 
     public Long getId() {
         return id;
@@ -67,13 +71,15 @@ public class Room {
         this.hotel = hotel;
     }
 
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
+//    public List<Reservation> getReservations() {
+//        return reservations;
+//    }
+//
+//    public void setReservations(List<Reservation> reservations) {
+//        this.reservations = reservations;
+//    }
 
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
+    //toString
 
     @Override
     public String toString() {
@@ -83,5 +89,4 @@ public class Room {
                 ", capacity=" + capacity +
                 '}';
     }
-
 }
