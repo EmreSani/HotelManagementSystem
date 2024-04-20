@@ -10,8 +10,9 @@ import java.util.List;
 @Table(name = "t_guest")
 public class Guest {
 
-    //todo : auto generated
+
     @Id//pk
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

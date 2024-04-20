@@ -1,29 +1,39 @@
 package com.tpe.controller;
 
 import com.tpe.config.HibernateUtils;
+import com.tpe.repository.GuestRepository;
 import com.tpe.repository.HotelRepository;
+import com.tpe.repository.ReservationRepository;
 import com.tpe.repository.RoomRepository;
+import com.tpe.service.GuestService;
 import com.tpe.service.HotelService;
+import com.tpe.service.ReservationService;
 import com.tpe.service.RoomService;
 
 import java.util.Scanner;
 
 public class HotelManagementSystem {
 
-    private static Scanner scanner=new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in);
 
     //ana menü
-    public static void displayHotelManagementSystemMenu(){
-         //sadece 1 tane hotelrepo oluşturduk, tüm uygulamada kullanabiliriz.
-        HotelRepository hotelRepository=new HotelRepository();
-        HotelService hotelService=new HotelService(hotelRepository);
+    public static void displayHotelManagementSystemMenu() {
+        //sadece 1 tane hotelrepo oluşturduk, tüm uygulamada kullanabiliriz.
+        HotelRepository hotelRepository = new HotelRepository();
+        HotelService hotelService = new HotelService(hotelRepository);
 
-        RoomRepository roomRepository=new RoomRepository();
-        RoomService roomService=new RoomService(hotelService,roomRepository);
+        RoomRepository roomRepository = new RoomRepository();
+        RoomService roomService = new RoomService(hotelService, roomRepository);
 
-        boolean exit=false;
+        GuestRepository guestRepository = new GuestRepository();
+        GuestService guestService = new GuestService(guestRepository);
 
-        while(!exit){
+        ReservationRepository reservationRepository = new ReservationRepository();
+        ReservationService reservationService = new ReservationService(reservationRepository, guestService, roomService);
+
+        boolean exit = false;
+
+        while (!exit) {
             System.out.println("========= Hotel Management System =========");
             System.out.println("1.Hotel Operations");
             System.out.println("2.Room Operations");
@@ -32,10 +42,10 @@ public class HotelManagementSystem {
             System.out.println("0. Exit");
             System.out.println("Enter your choice : ");
 
-            int choice= scanner.nextInt();
+            int choice = scanner.nextInt();
             scanner.nextLine();
 
-            switch (choice){
+            switch (choice) {
                 case 1:
                     displayHotelOperationsMenu(hotelService);
                     break;
@@ -43,13 +53,13 @@ public class HotelManagementSystem {
                     displayRoomOperationsMenu(roomService);
                     break;
                 case 3:
-                    displayGuestOperationsMenu();
+                    displayGuestOperationsMenu(guestService);
                     break;
                 case 4:
-                    displayReservationOperationsMenu();
+                    displayReservationOperationsMenu(reservationService);
                     break;
                 case 0:
-                    exit=true;
+                    exit = true;
                     System.out.println("Good Bye...");
                     HibernateUtils.shutDown();
                     break;
@@ -92,7 +102,7 @@ public class HotelManagementSystem {
                 case 2:
                     //2-a: hotel bulma
                     System.out.println("Enter hotel ID : ");
-                    Long id= scanner.nextLong();
+                    Long id = scanner.nextLong();
                     scanner.nextLine();
 
                     hotelService.findHotelById(id);
@@ -100,7 +110,7 @@ public class HotelManagementSystem {
                 case 3:
                     //7-a: hotel silme
                     System.out.println("Enter hotel ID : ");
-                    Long hotelid= scanner.nextLong();
+                    Long hotelid = scanner.nextLong();
                     scanner.nextLine();
 
                     hotelService.deleteHotel(hotelid);
@@ -112,7 +122,7 @@ public class HotelManagementSystem {
                 case 5:
                     //8-a: hotel güncelleme
                     System.out.println("Enter hotel ID : ");
-                    Long updatedHotelId= scanner.nextLong();
+                    Long updatedHotelId = scanner.nextLong();
                     scanner.nextLine();
 
                     hotelService.updateHotelById(updatedHotelId);
@@ -158,15 +168,17 @@ public class HotelManagementSystem {
                 case 2:
                     //5-a
                     System.out.println("Enter room ID : ");
-                    Long roomId= scanner.nextLong();
+                    Long roomId = scanner.nextLong();
                     scanner.nextLine();
 
                     roomService.findRoomById(roomId);
                     break;
                 case 3:
                     //ödev1:delete
-
-
+                    System.out.print("Enter the room ID to delete: ");
+                    Long roomIdToDelete = scanner.nextLong();
+                    scanner.nextLine();
+                    roomService.deleteRoomById(roomIdToDelete);
                     break;
                 case 4:
                     //6-a
@@ -175,7 +187,6 @@ public class HotelManagementSystem {
                 case 0:
                     exit = true;
                     System.out.println("Returning to Main Menu...");
-
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -186,7 +197,7 @@ public class HotelManagementSystem {
     }
 
     //guest operations
-    private static void displayGuestOperationsMenu() {
+    private static void displayGuestOperationsMenu(GuestService guestService) {
         System.out.println("Guest Operation Menu");
 
         boolean exit = false;
@@ -204,18 +215,25 @@ public class HotelManagementSystem {
 
             switch (choice) {
                 case 1:
-
+                    guestService.saveGuest();
                     break;
                 case 2:
                     //ödev2:find
-
+                    System.out.print("Enter the Guest ID :");
+                    Long guestId = scanner.nextLong();
+                    scanner.nextLine();
+                    guestService.findGuestById(guestId);
                     break;
                 case 3:
-
-
+                    System.out.print("Enter the Guest ID :");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
+                    guestService.deleteGuestById(id);
                     break;
                 case 4:
                     //ödev3:allguest
+                    guestService.findAllGuest();
+
 
                     break;
                 case 0:
@@ -230,7 +248,7 @@ public class HotelManagementSystem {
     }
 
     //reservation operations
-    private static void displayReservationOperationsMenu() {
+    private static void displayReservationOperationsMenu(ReservationService reservationService) {
         System.out.println("Reservation Operation Menu");
 
         boolean exit = false;
@@ -248,17 +266,31 @@ public class HotelManagementSystem {
 
             switch (choice) {
                 case 1:
+                    reservationService.createReservation();
 
                     break;
                 case 2:
                     //ödev4:find
+                    System.out.print("Enter the reservation ID: ");
+                    Long reservationId = scanner.nextLong();
+                    scanner.nextLine();
+
+                    reservationService.findReservationById(reservationId);
 
                     break;
                 case 3:
+                    //ödev5:all
+                    reservationService.findAllReservations();
+
 
                     break;
                 case 4:
-                    //ödev5:all
+                    //12-a:rezervasyon iptal
+                    System.out.print("Enter the reservation ID: ");
+                    Long id = scanner.nextLong();
+                    scanner.nextLine();
+
+                    reservationService.deleteReservationById(id);
 
                     break;
                 case 0:
@@ -274,8 +306,6 @@ public class HotelManagementSystem {
 
 
     }
-
-
 
 
 }

@@ -22,8 +22,8 @@ public class HibernateUtils {
                     .addAnnotatedClass(Hotel.class)
                     .addAnnotatedClass(Room.class)
                     //n01 : comment
-               /*     .addAnnotatedClass(Reservation.class)
-                    .addAnnotatedClass(Guest.class)*/;
+                    .addAnnotatedClass(Reservation.class)
+                    .addAnnotatedClass(Guest.class);
 
             sessionFactory = configuration.buildSessionFactory();
         }catch (Exception e){

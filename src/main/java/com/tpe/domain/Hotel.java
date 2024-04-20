@@ -26,7 +26,7 @@ public class Hotel {
     //A otelinin oda listesinden 11 i çıkarırsam:room tableda 11 hala var
 
 
-    @OneToMany(mappedBy = "hotel",cascade = CascadeType.REMOVE)//hotel ile room arasında ilişki kurulmasını sağlar: ilişki tablosu ekler
+    @OneToMany(mappedBy = "hotel",cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)//hotel ile room arasında ilişki kurulmasını sağlar: ilişki tablosu ekler
     private List<Room> rooms=new ArrayList<>();
 
     //hibernate data çekerken(fetch) default constructorı kullanır.

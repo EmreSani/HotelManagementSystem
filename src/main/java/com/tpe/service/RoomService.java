@@ -92,4 +92,15 @@ public class RoomService {
             System.out.println("No rooms found!");
         }
     }
+
+    public void deleteRoomById(Long roomIdToDelete) {
+
+        Room foundRoom = findRoomById(roomIdToDelete);
+        if (foundRoom!=null){
+
+            roomRepository.deleteRoom(foundRoom);
+            System.out.println(foundRoom + " deleted succesfully");
+
+        }
+    }
 }

@@ -9,21 +9,26 @@ import java.time.LocalDate;
 @Table(name = "t_reservation")
 public class Reservation {
 
-    //todo : auto generated
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private LocalDate checkInDate;
+
     @Column(nullable = false)
     private LocalDate checkOutDate;
-    @ManyToOne//fk ile ilişki kurar
+
+    @ManyToOne(fetch = FetchType.LAZY)//fk ile ilişki kurar
     @JoinColumn(nullable = false)
     private Guest guest;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     private Room room;
+
+    public Reservation() {
+    }
 
     //getter-setter
 
